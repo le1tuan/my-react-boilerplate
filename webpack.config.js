@@ -1,5 +1,10 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin  = require('extract-text-webpack-plugin');
+const  extractSass  = new ExtractTextPlugin({
+    filename: "[name].[contenthash].css",
+    disable: process.env.NODE_ENV === "development"
+});
 module.exports = {
     entry: 
     [
@@ -27,6 +32,10 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [ 'style-loader', 'css-loader' ]
+            },
+            {
+                test: /\.sass$/,
+                use: ['css-loader',"sass-loader","style-loader"],
             },
             {
                 test: /\.(eot|svg|ttf|woff|woff2)$/,
@@ -58,7 +67,10 @@ module.exports = {
             }   
         ]
     },
-    plugins: [new HtmlWebpackPlugin({
-        template: 'public/index.html'
-    })]
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: 'public/index.html'
+        }),
+        extractSass
+    ]
 }
